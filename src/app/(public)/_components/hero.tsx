@@ -6,7 +6,7 @@ export function Hero() {
   return (
     <section className="bg-white">
       <div className="container mx-auto px-4 pt-6 pb-16 sm:px-8 sm:pt-20 sm:pb-24 lg:px-12 lg:pt-28">
-        <main className="flex flex-col items-center gap-10 pt-20 text-center lg:min-h-[60vh] lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:text-left">
+        <main className="flex flex-col items-center gap-10 pt-16 md:pt-4 text-center lg:min-h-[60vh] lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:text-left">
           <article className="flex w-full max-w-3xl flex-col items-center justify-center gap-8 text-balance lg:items-start">
             <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
               Encontre os melhores profissionais em um único local!

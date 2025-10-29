@@ -162,7 +162,7 @@ export function SideBarDashboard({ children }: { children: React.ReactNode }) {
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
                 <Button variant="outline" size="icon" className="md:hidden">
-                  <List className="w-5 h-h" />
+                  <List className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
               <h1 className="text-base md:text-lg font-semibold ">
@@ -170,7 +170,7 @@ export function SideBarDashboard({ children }: { children: React.ReactNode }) {
               </h1>
             </div>
 
-            <SheetContent side="right" className="sm:max-w-xs text-black">
+            <SheetContent side="right" className="sm:max-w-xs text-black p-4">
               <SheetTitle>ClinicaPRO</SheetTitle>
               <SheetDescription>Menu administrativo</SheetDescription>
               <nav className="grid gap-2 text-base pt-5">

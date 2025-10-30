@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,6 +34,8 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
 import { updateProfile } from "../_actions/uptade-profile";
+import { toast } from "sonner";
+import { formatPhone } from "@/utils/formatPhone";
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: {
@@ -104,7 +105,11 @@ export function ProfileContent({ user }: ProfileContentProps) {
       times: selectedHours || [],
     });
 
-    console.log("respsota", response);
+    if (response.error) {
+      toast.error(response.error);
+      return;
+    }
+    toast.success(response.data);
   }
 
   return (
@@ -173,7 +178,14 @@ export function ProfileContent({ user }: ProfileContentProps) {
                     <FormItem>
                       <FormLabel className="font-semibold">Telefone</FormLabel>
                       <FormControl>
-                        <Input {...field} placeholder="Digite o telefone..." />
+                        <Input
+                          {...field}
+                          placeholder="(33) 99199-3858"
+                          onChange={(e) => {
+                            const formattedValue = formatPhone(e.target.value);
+                            field.onChange(formattedValue);
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

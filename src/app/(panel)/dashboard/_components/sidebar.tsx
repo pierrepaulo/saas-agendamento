@@ -161,7 +161,12 @@ export function SideBarDashboard({ children }: { children: React.ReactNode }) {
           <Sheet>
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="md:hidden">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="md:hidden"
+                  onClick={() => setIsCollapsed(false)}
+                >
                   <List className="w-5 h-5" />
                 </Button>
               </SheetTrigger>

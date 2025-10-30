@@ -34,6 +34,7 @@ import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
+import { updateProfile } from "../_actions/uptade-profile";
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: {
@@ -94,11 +95,16 @@ export function ProfileContent({ user }: ProfileContentProps) {
   );
 
   async function onSubmit(values: ProfileFormData) {
-    const profileData = {
-      ...values,
-      times: selectedHours,
-    };
-    //console.log("values", profileData);
+    const response = await updateProfile({
+      name: values.name,
+      address: values.address,
+      phone: values.phone,
+      status: values.status === "active" ? true : false,
+      timeZone: values.timeZone,
+      times: selectedHours || [],
+    });
+
+    console.log("respsota", response);
   }
 
   return (

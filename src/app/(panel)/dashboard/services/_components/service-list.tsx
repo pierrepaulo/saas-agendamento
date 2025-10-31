@@ -1,24 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DialogService } from "./dialog-service";
@@ -41,7 +26,11 @@ export function ServicesLis() {
             </DialogTrigger>
 
             <DialogContent>
-              <DialogService />
+              <DialogService
+                closeModal={() => {
+                  setIsDialogOpen(false);
+                }}
+              />
             </DialogContent>
           </CardHeader>
         </Card>

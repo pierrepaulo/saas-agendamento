@@ -3,13 +3,36 @@
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DialogService } from "./dialog-service";
+import { Service } from "@prisma/client";
+import { formatCurrency } from "@/utils/formatCurrency";
+import { deleteService } from "../_actions/delete-service";
+import { toast } from "sonner";
 
-export function ServicesLis() {
+interface ServicesListProps {
+  services: Service[];
+}
+
+export function ServicesLis({ services }: ServicesListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingService, setEditingService] = useState<null | Service>(null);
+
+  async function handleDeleteService(serviceId: string) {
+    const response = await deleteService({ serviceId: serviceId });
+    if (response.error) {
+      toast(response.error);
+      return;
+    }
+    toast.success(response.data);
+  }
+
+  function handleEditService(service: Service) {
+    setEditingService(service);
+    setIsDialogOpen(true);
+  }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -25,14 +48,72 @@ export function ServicesLis() {
               </Button>
             </DialogTrigger>
 
-            <DialogContent>
+            <DialogContent
+              onInteractOutside={(e) => {
+                e.preventDefault();
+                setIsDialogOpen(false);
+                setEditingService(null);
+              }}
+            >
               <DialogService
                 closeModal={() => {
                   setIsDialogOpen(false);
+                  setEditingService(null);
                 }}
+                serviceId={editingService ? editingService.id : undefined}
+                initialValues={
+                  editingService
+                    ? {
+                        name: editingService.name,
+                        price: (editingService.price / 100)
+                          .toFixed(2)
+                          .replace(".", ","),
+                        hours: Math.floor(
+                          editingService.duration / 60
+                        ).toString(),
+                        minutes: (editingService.duration % 60).toString(),
+                      }
+                    : undefined
+                }
               />
             </DialogContent>
           </CardHeader>
+
+          <CardContent>
+            <section className="space-y-4">
+              {services.map((service) => (
+                <article
+                  key={service.id}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center space-x-2">
+                    <span className="font-medium">{service.name}</span>
+                    <span className="text-gray-600">-</span>
+                    <span className="text-gray-600">
+                      {formatCurrency(service.price / 100)}
+                    </span>
+                  </div>
+
+                  <div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditService(service)}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteService(service.id)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </article>
+              ))}
+            </section>
+          </CardContent>
         </Card>
       </section>
     </Dialog>

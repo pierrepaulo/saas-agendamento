@@ -213,7 +213,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
                       <FormControl>
                         <Select
                           onValueChange={field.onChange}
-                          defaultValue={field.value ? "active" : "inactive"}
+                          value={field.value}
                         >
                           <SelectTrigger>
                             <SelectValue placeholder="Selecione o status da clincia" />

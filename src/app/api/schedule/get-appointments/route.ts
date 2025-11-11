@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
 
       if (startIndex !== -1) {
         for (let i = 0; i < requiredSlots; i++) {
-          const blockedSlot = user.times[startIndex + 1];
+          const blockedSlot = user.times[startIndex + i];
           if (blockedSlot) {
             blockedSlots.add(blockedSlot);
           }

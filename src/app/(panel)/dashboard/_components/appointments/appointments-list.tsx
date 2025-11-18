@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import { DialogAppointment } from "./dialog-appointment";
+import { ButtonPickerAppointment } from "./button-date";
 
 export type AppointmentWithService = Prisma.AppointmentGetPayload<{
   include: {
@@ -53,8 +54,6 @@ export function AppointmentsList({ times }: AppointmentsListProps) {
       const response = await fetch(url);
 
       const json = (await response.json()) as AppointmentWithService[];
-
-      console.log(json);
 
       if (!response.ok) {
         return [];
@@ -106,7 +105,7 @@ export function AppointmentsList({ times }: AppointmentsListProps) {
             Agendamentos
           </CardTitle>
 
-          <button>SELECIONAR DATA</button>
+          <ButtonPickerAppointment />
         </CardHeader>
 
         <CardContent>

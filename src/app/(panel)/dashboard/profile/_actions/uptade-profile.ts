@@ -53,7 +53,6 @@ export async function updateProfile(formData: FormSchema) {
       data: "Clinica atualizada com sucesso!",
     };
   } catch (err) {
-    //console.log(err);
     return {
       error: "Falha ao atualizar clinica",
     };

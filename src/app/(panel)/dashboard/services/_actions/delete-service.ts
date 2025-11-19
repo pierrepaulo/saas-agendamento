@@ -41,7 +41,6 @@ export async function deleteService(formData: FromSchema) {
       data: "Serviço deletado com sucesso",
     };
   } catch (err) {
-    //console.log(err)
     return {
       error: "Falha ao deletar serviço",
     };

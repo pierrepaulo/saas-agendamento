@@ -72,11 +72,8 @@ export async function GET(request: NextRequest) {
 
     const blockedTimes = Array.from(blockedSlots);
 
-    console.log("blockedtimes", blockedTimes);
-
     return NextResponse.json(blockedTimes);
   } catch (err) {
-    console.log(err);
     return NextResponse.json(
       {
         error: "nenhum agendamento encontrado",

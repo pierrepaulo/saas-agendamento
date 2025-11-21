@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/card";
 import { subscriptionPlans } from "@/utils/plans";
 import { Subscription } from "@prisma/client";
+import { createPortalCustomer } from "../_actions/create-portal-customer";
+import { toast } from "sonner";
 
 interface SubscriptionDetailProps {
   subscription: Subscription;
@@ -22,7 +24,14 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
   );
 
   async function handleManageSubscription() {
-    console.log("teste");
+    const portal = await createPortalCustomer();
+
+    if (portal.error) {
+      toast.error("Ocorreu um erro ao criar o portal de assinatura");
+      return;
+    }
+
+    window.location.href = portal.sessionId;
   }
 
   return (
@@ -38,7 +47,7 @@ export function SubscriptionDetail({ subscription }: SubscriptionDetailProps) {
             {subscription.plan === "BASIC" ? "BASIC" : "PROFISSIONAL"}
           </h3>
 
-          <div className="bg-green-500 text-white w-fit px-4 py-1 rounded-md">
+          <div className="bg-green-500 text-white w-fit px-4 py-1 rounded-md font-semibold">
             {subscription.status === "active" ? "ATIVO" : "INATIVO"}
           </div>
         </div>

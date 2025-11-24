@@ -1,31 +1,38 @@
 "use client";
-
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Pencil, Plus, X } from "lucide-react";
 import { DialogService } from "./dialog-service";
 import { Service } from "@prisma/client";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { deleteService } from "../_actions/delete-service";
 import { toast } from "sonner";
+import { ResultPermissionProp } from "@/utils/permissions/canPermission";
+import Link from "next/link";
 
 interface ServicesListProps {
   services: Service[];
+  permission: ResultPermissionProp;
 }
 
-export function ServicesLis({ services }: ServicesListProps) {
+export function ServicesList({ services, permission }: ServicesListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingService, setEditingService] = useState<null | Service>(null);
 
+  const servicesList = permission.hasPermission
+    ? services
+    : services.slice(0, 3);
+
   async function handleDeleteService(serviceId: string) {
     const response = await deleteService({ serviceId: serviceId });
+
     if (response.error) {
       toast(response.error);
       return;
     }
+
     toast.success(response.data);
   }
 
@@ -39,6 +46,7 @@ export function ServicesLis({ services }: ServicesListProps) {
       open={isDialogOpen}
       onOpenChange={(open) => {
         setIsDialogOpen(open);
+
         if (!open) {
           setEditingService(null);
         }
@@ -50,11 +58,19 @@ export function ServicesLis({ services }: ServicesListProps) {
             <CardTitle className="text-xl md:text-2xl font-bold">
               Serviços
             </CardTitle>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="h-4 w-4" />
-              </Button>
-            </DialogTrigger>
+            {permission.hasPermission && (
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </DialogTrigger>
+            )}
+
+            {!permission.hasPermission && (
+              <Link href="/dashboard/plans" className="text-red-500">
+                Limite de serviços atingido
+              </Link>
+            )}
 
             <DialogContent
               onInteractOutside={(e) => {
@@ -88,16 +104,18 @@ export function ServicesLis({ services }: ServicesListProps) {
           </CardHeader>
 
           <CardContent>
-            <section className="space-y-4">
-              {services.map((service) => (
+            <section className="space-y-4 mt-5">
+              {servicesList.map((service) => (
                 <article
                   key={service.id}
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center space-x-2">
                     <span className="font-medium">{service.name}</span>
-                    <span className="text-gray-600">-</span>
-                    <span className="text-gray-600">
+
+                    <span className="text-gray-500">-</span>
+
+                    <span className="text-gray-500">
                       {formatCurrency(service.price / 100)}
                     </span>
                   </div>

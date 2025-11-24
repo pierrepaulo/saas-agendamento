@@ -13,7 +13,6 @@ interface SubscriptionButtonProps {
 export function SubscriptionButton({ type }: SubscriptionButtonProps) {
   async function handleCreateBilling() {
     const { sessionId, error, url } = await createSubscription({ type: type });
-    console.log(sessionId);
 
     if (error) {
       toast.error(error);

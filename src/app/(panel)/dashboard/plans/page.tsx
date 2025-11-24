@@ -12,7 +12,6 @@ export default async function Plans() {
   }
 
   const subscription = await getSubscription({ userId: session?.user?.id! });
-  console.log(subscription);
 
   return (
     <div>

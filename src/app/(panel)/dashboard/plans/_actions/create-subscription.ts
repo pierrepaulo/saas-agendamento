@@ -81,8 +81,6 @@ export async function createSubscription({ type }: SubscriptionProps) {
       url: stripeCheckoutSession.url,
     };
   } catch (err) {
-    console.log("erro ao cria checkout");
-    console.log(err);
     return {
       sessionId: "",
       error: "Falha ao ativar plano",

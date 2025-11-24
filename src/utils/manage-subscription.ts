@@ -50,10 +50,7 @@ export async function manageSubscription(
       await prisma.subscription.create({
         data: subscriptionData,
       });
-    } catch (err) {
-      console.log("erro al salvar assinatura no banco");
-      console.log(err);
-    }
+    } catch (err) {}
   } else {
     try {
       const findSubscription = await prisma.subscription.findFirst({
@@ -74,9 +71,6 @@ export async function manageSubscription(
           plan: type ?? "BASIC",
         },
       });
-    } catch (err) {
-      console.log("falha ao atualizar assinatura no banco");
-      console.log(err);
-    }
+    } catch (err) {}
   }
 }

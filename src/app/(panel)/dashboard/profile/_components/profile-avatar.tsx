@@ -20,12 +20,14 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
   const { update } = useSession();
 
   async function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files[0]) {
-      setLoading(true);
+    if (!e.target.files?.[0]) return;
+
+    setLoading(true);
+    try {
       const image = e.target.files[0];
 
-      if (image.type !== "image/jpeg" && image.type !== "image/png") {
-        toast.error("Formato de imagem inválido ");
+      if (!["image/jpeg", "image/png"].includes(image.type)) {
+        toast.error("Formato de imagem inválido");
         return;
       }
 
@@ -33,19 +35,15 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
       const newFile = new File([image], newFileName, { type: image.type });
 
       const urlImage = await uploadImage(newFile);
-
-      if (!urlImage || urlImage === "") {
+      if (!urlImage) {
         toast.error("Falha ao alterar imagem");
         return;
       }
 
       setPreviewImage(urlImage);
-
       await updateProfileAvatar({ avatarUrl: urlImage });
-      await update({
-        image: urlImage,
-      });
-
+      await update({ image: urlImage });
+    } finally {
       setLoading(false);
     }
   }

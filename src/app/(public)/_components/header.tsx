@@ -60,7 +60,7 @@ export function Header() {
   );
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-[999] py-4 px-6 bg-white">
+    <header className="fixed top-0 right-0 left-0 z-999 py-4 px-6 bg-white">
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="text-3xl font-bold text-zinc-900">
           Clinica<span className="text-emerald-500">PRO</span>
@@ -78,7 +78,7 @@ export function Header() {
 
           <SheetContent
             side="right"
-            className="z-[9999] w-[240px] sm:w-[300px] px-6 pt-14"
+            className="z-9999 w-60 sm:w-[300px] px-6 pt-14"
           >
             <SheetHeader className="px-0 pt-0">
               <SheetTitle>Menu</SheetTitle>

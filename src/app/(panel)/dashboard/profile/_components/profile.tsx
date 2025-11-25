@@ -233,7 +233,7 @@ export function ProfileContent({ user }: ProfileContentProps) {
                     <DialogTrigger asChild>
                       <Button
                         variant="outline"
-                        className="w-full justify-between"
+                        className="w-full justify-between font-normal"
                       >
                         Clique aqui para selecionar horários
                         <ArrowRight className="w-5 h-5" />

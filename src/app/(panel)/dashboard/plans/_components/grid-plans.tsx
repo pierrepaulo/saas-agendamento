@@ -43,7 +43,7 @@ export function GridPlans() {
               <p className="text-2xl font-bold">{plan.price}</p>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="mt-auto">
             <SubscriptionButton
               type={plan.id === "BASIC" ? "BASIC" : "PROFESSIONAL"}
             />

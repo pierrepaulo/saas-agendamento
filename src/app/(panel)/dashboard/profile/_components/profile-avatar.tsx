@@ -74,7 +74,6 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
       toast("Imagem alterada com sucesso!");
       return data.secure_url as string;
     } catch (err) {
-      console.log(err);
       return null;
     }
   }

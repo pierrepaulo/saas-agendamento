@@ -32,7 +32,7 @@ export const metadata: Metadata = {
       "Clinica PRO é um sistema de agendamento online que organiza a rotina da sua clínica, reduz faltas e automatiza seus agendamentos.",
     images: [
       {
-        url: "/og-clinica.png",
+        url: "/og-clinica-pro.png",
         width: 1200,
         height: 630,
         alt: "Dashboard da Clinica PRO com agenda de consultas organizada.",

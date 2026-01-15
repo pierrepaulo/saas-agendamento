@@ -15,49 +15,64 @@ import Link from "next/link";
 import { useState } from "react";
 import { handleRegister } from "../_actions/login";
 
-export function Header() {
-  const { data: session, status } = useSession();
-  const [isOpen, setIsOpen] = useState(false);
+type SessionStatus = "loading" | "authenticated" | "unauthenticated";
 
-  const navItems = [{ href: "#profissionais", label: "Profissionais" }];
+type NavItem = {
+  href: string;
+  label: string;
+};
 
-  async function handleLogin() {
-    await handleRegister("google");
-  }
+const NAV_ITEMS: NavItem[] = [{ href: "#profissionais", label: "Profissionais" }];
 
-  const navLinkClass =
-    "flex w-full items-center justify-center md:w-auto text-base font-medium text-zinc-900 transition-colors hover:text-zinc-700";
+const NAV_LINK_CLASS =
+  "flex w-full items-center justify-center md:w-auto text-base font-medium text-zinc-900 transition-colors hover:text-zinc-700";
 
-  const NavLinks = () => (
+interface NavLinksProps {
+  onNavigate: () => void;
+  onLogin: () => void;
+  status: SessionStatus;
+  isAuthenticated: boolean;
+}
+
+function NavLinks({
+  onNavigate,
+  onLogin,
+  status,
+  isAuthenticated,
+}: NavLinksProps) {
+  return (
     <>
-      {navItems.map((item) => (
+      {NAV_ITEMS.map((item) => (
         <Link
-          onClick={() => setIsOpen(false)}
+          onClick={onNavigate}
           key={item.href}
           href={item.href}
-          className={navLinkClass}
+          className={NAV_LINK_CLASS}
         >
           {item.label}
         </Link>
       ))}
 
-      {status === "loading" ? (
-        <></>
-      ) : session ? (
-        <Link
-          href={"/dashboard"}
-          onClick={() => setIsOpen(false)}
-          className={navLinkClass}
-        >
+      {status === "loading" ? null : isAuthenticated ? (
+        <Link href="/dashboard" onClick={onNavigate} className={NAV_LINK_CLASS}>
           Acessar clinica
         </Link>
       ) : (
-        <Button onClick={handleLogin}>
+        <Button onClick={onLogin}>
           <LogIn /> Portal da clinica
         </Button>
       )}
     </>
   );
+}
+
+export function Header() {
+  const { data: session, status } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+
+  async function handleLogin() {
+    await handleRegister("google");
+  }
 
   return (
     <header className="fixed top-0 right-0 left-0 z-999 py-4 px-6 bg-white">
@@ -66,7 +81,12 @@ export function Header() {
           Clinica<span className="text-emerald-500">PRO</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
-          <NavLinks />
+          <NavLinks
+            onNavigate={() => setIsOpen(false)}
+            onLogin={handleLogin}
+            status={status}
+            isAuthenticated={Boolean(session)}
+          />
         </nav>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -85,7 +105,12 @@ export function Header() {
               <SheetDescription>Veja nossos links</SheetDescription>
             </SheetHeader>
             <nav className="flex flex-col gap-3">
-              <NavLinks />
+              <NavLinks
+                onNavigate={() => setIsOpen(false)}
+                onLogin={handleLogin}
+                status={status}
+                isAuthenticated={Boolean(session)}
+              />
             </nav>
           </SheetContent>
         </Sheet>

@@ -11,24 +11,25 @@ import { LabelSubscription } from "@/components/ui/label-subscription";
 
 export default async function Dashboard() {
   const session = await getSesion();
+  const userId = session?.user?.id;
 
-  if (!session) {
+  if (!userId) {
     redirect("/");
   }
 
-  const subscription = await checkSubscription(session?.user?.id!);
+  const subscription = await checkSubscription(userId);
 
   return (
     <main>
       <div className="space-x-2 flex items-center justify-end">
-        <Link href={`/clinica/${session.user?.id}`} target="_blank">
+        <Link href={`/clinica/${userId}`} target="_blank">
           <Button className="bg-emerald-500 hover:bg-emerald-400 flex-1 md:flex-0">
             <Calendar className="w-5 h-5" />
             <span>Novo agendamento</span>
           </Button>
         </Link>
 
-        <ButtonCopyLink userId={session.user?.id!} />
+        <ButtonCopyLink userId={userId} />
       </div>
 
       {subscription?.subscriptionStatus === "EXPIRED" && (
@@ -43,9 +44,9 @@ export default async function Dashboard() {
 
       {subscription?.subscriptionStatus !== "EXPIRED" && (
         <section className="grid grid-cols-1 gap-4 lg:grid-cols-2 mt-4">
-          <Appointments userId={session.user?.id!} />
+          <Appointments userId={userId} />
 
-          <Reminders userId={session.user?.id!} />
+          <Reminders userId={userId} />
         </section>
       )}
     </main>

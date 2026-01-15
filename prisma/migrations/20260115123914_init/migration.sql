@@ -67,6 +67,7 @@ CREATE TABLE "User" (
     "status" BOOLEAN NOT NULL DEFAULT true,
     "timeZone" TEXT,
     "stripe_customer_id" TEXT,
+    "times" TEXT[] DEFAULT ARRAY[]::TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

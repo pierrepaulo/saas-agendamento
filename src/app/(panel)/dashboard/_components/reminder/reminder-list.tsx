@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle, CardHeader } from "@/components/ui/card";
-import { Reminder } from "@prisma/client";
 import { Plus, Trash } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
@@ -18,6 +17,7 @@ import {
 import { ReminderContent } from "./reminder-content";
 import { deleteReminder } from "../../_actions/delete-remind";
 import { useState } from "react";
+import type { Reminder } from "@/generated/prisma/browser";
 
 interface ReminderListProps {
   reminder: Reminder[];

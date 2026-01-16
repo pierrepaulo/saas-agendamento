@@ -26,19 +26,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
-import imgTest from "../../../../../../public/foto1.png";
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { Prisma } from "@prisma/client";
 import { updateProfile } from "../_actions/uptade-profile";
 import { toast } from "sonner";
 import { formatPhone } from "@/utils/formatPhone";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { AvatarProfile } from "./profile-avatar";
+import type { Prisma } from "@/generated/prisma/browser";
 
 type UserWithSubscription = Prisma.UserGetPayload<{
   include: {

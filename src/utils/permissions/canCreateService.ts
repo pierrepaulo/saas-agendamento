@@ -1,12 +1,12 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { Subscription } from "@prisma/client";
 import { Session } from "next-auth";
 import { getPlan } from "./get-plans";
 import { PLANS } from "../plans";
 import { checkSubscriptionExpired } from "@/utils/permissions/checkSubscriptionExpired";
 import { ResultPermissionProp } from "./canPermission";
+import { Subscription } from "@/generated/prisma/client";
 
 export async function canCreateService(
   subscription: Subscription | null,

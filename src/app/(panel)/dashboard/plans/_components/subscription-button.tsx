@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plan } from "@prisma/client";
 import { createSubscription } from "../_actions/create-subscription";
 import { toast } from "sonner";
 import { getStripeJs } from "@/utils/stripe-js";
+import type { Plan } from "@/generated/prisma/browser";
 
 interface SubscriptionButtonProps {
   type: Plan;

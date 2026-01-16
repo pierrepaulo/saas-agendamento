@@ -5,14 +5,15 @@ import { Suspense } from "react";
 
 export default async function Services() {
   const session = await getSession();
+  const userId = session?.user?.id;
 
-  if (!session) {
+  if (!userId) {
     redirect("/");
   }
 
   return (
     <Suspense fallback={<div>Carregando...</div>}>
-      <ServicesContent userId={session.user?.id!} />
+      <ServicesContent userId={userId} />
     </Suspense>
   );
 }

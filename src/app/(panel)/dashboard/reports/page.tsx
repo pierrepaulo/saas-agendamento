@@ -4,12 +4,13 @@ import { getPermissionUserToReports } from "./_data-access/get-permissions-repor
 
 export default async function Reports() {
   const session = await getSession();
+  const userId = session?.user?.id;
 
-  if (!session) {
+  if (!userId) {
     redirect("/");
   }
 
-  const user = await getPermissionUserToReports({ userId: session?.user?.id! });
+  const user = await getPermissionUserToReports({ userId });
 
   if (!user) {
     return (

@@ -3,7 +3,6 @@
 import Image from "next/image";
 import imgTest from "../../../../../../public/foto1.png";
 import { MapPin } from "lucide-react";
-import { Prisma } from "@prisma/client";
 import { useAppointmentForm, AppointmentFormData } from "./schedule-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,10 +24,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DateTimePicker } from "./date-picker";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ScheduleTimeList } from "./schedule-times-list";
 import { createNewAppointment } from "../_actions/create-appointment";
 import { toast } from "sonner";
+import type { Prisma } from "@/generated/prisma/browser";
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {
@@ -54,14 +54,12 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
   const selectedServiceId = watch("serviceId");
 
   const [selectedTime, setSelectedTime] = useState("");
-  const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
   const [blockedTimes, setBlockedTimes] = useState<string[]>([]);
 
   const fetchBlockedTimes = useCallback(
     async (date: Date): Promise<string[]> => {
-      setLoadingSlots(true);
       try {
         const dateString = date.toISOString().split("T")[0];
         const response = await fetch(
@@ -69,40 +67,40 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
         );
 
         const json = await response.json();
-        setLoadingSlots(false);
         return json;
       } catch (err) {
-        setLoadingSlots(false);
         return [];
       }
     },
     [clinic.id]
   );
 
-  useEffect(() => {
-    if (selectedDate) {
-      fetchBlockedTimes(selectedDate).then((blocked) => {
+  const handleDateChange = useCallback(
+    async (date: Date) => {
+      setSelectedTime("");
+      setLoadingSlots(true);
+      try {
+        const blocked = await fetchBlockedTimes(date);
         setBlockedTimes(blocked);
+      } finally {
+        setLoadingSlots(false);
+      }
+    },
+    [fetchBlockedTimes]
+  );
 
-        const times = clinic.times || [];
-
-        const finalSlots = times.map((time) => ({
-          time: time,
-          available: !blocked.includes(time),
-        }));
-
-        const stillAvailable = finalSlots.find(
-          (slot) => slot.time === selectedTime && slot.available
-        );
-
-        if (!stillAvailable) {
-          setSelectedTime("");
-        }
-
-        setAvailableTimeSlots(finalSlots);
-      });
+  const availableTimeSlots = useMemo(() => {
+    if (!selectedDate) {
+      return [];
     }
-  }, [selectedDate, clinic.times, fetchBlockedTimes, selectedTime]);
+
+    const times = clinic.times || [];
+
+    return times.map((time) => ({
+      time,
+      available: !blockedTimes.includes(time),
+    }));
+  }, [blockedTimes, clinic.times, selectedDate]);
 
   async function handleRegisterAppointment(formData: AppointmentFormData) {
     if (!selectedTime) {
@@ -236,10 +234,8 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                       initialDate={new Date()}
                       className="w-full rounded border p-2"
                       onChange={(date) => {
-                        if (date) {
-                          field.onChange(date);
-                          setSelectedTime("");
-                        }
+                        field.onChange(date);
+                        void handleDateChange(date);
                       }}
                     />
                   </FormControl>

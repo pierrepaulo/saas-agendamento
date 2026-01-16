@@ -6,12 +6,13 @@ import { SubscriptionDetail } from "./_components/subscription-details";
 
 export default async function Plans() {
   const session = await getSession();
+  const userId = session?.user?.id;
 
-  if (!session) {
+  if (!userId) {
     redirect("/");
   }
 
-  const subscription = await getSubscription({ userId: session?.user?.id! });
+  const subscription = await getSubscription({ userId });
 
   return (
     <div>

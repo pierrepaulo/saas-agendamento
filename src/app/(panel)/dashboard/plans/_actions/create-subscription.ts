@@ -1,9 +1,9 @@
 "use server";
 
+import { Plan } from "@/generated/prisma/enums";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { stripe } from "@/utils/stripe";
-import { Plan } from "@prisma/client";
 
 interface SubscriptionProps {
   type: Plan;

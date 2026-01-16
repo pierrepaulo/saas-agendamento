@@ -5,12 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Plus, X } from "lucide-react";
 import { DialogService } from "./dialog-service";
-import { Service } from "@prisma/client";
 import { formatCurrency } from "@/utils/formatCurrency";
 import { deleteService } from "../_actions/delete-service";
 import { toast } from "sonner";
 import { ResultPermissionProp } from "@/utils/permissions/canPermission";
 import Link from "next/link";
+import type { Service } from "@/generated/prisma/browser";
 
 interface ServicesListProps {
   services: Service[];

@@ -1,17 +1,10 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { Prisma } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { Eye, X } from "lucide-react";
 import { cancelAppointment } from "../../_actions/cancel-appointment";
@@ -20,6 +13,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
 import { DialogAppointment } from "./dialog-appointment";
 import { ButtonPickerAppointment } from "./button-date";
+import type { Prisma } from "@/generated/prisma/browser";
 
 export type AppointmentWithService = Prisma.AppointmentGetPayload<{
   include: {

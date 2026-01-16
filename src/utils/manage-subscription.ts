@@ -1,6 +1,6 @@
+import { Plan } from "@/generated/prisma/enums";
 import prisma from "@/lib/prisma";
 import { stripe } from "@/utils/stripe";
-import { Plan } from "@prisma/client";
 
 /**
  * salvar, atualizar ou deletar informações das assinaturas (subscription) no banco de dados, sincronizando com stripe.

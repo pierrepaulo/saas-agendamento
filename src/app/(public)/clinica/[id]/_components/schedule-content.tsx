@@ -3,7 +3,6 @@
 import Image from "next/image";
 import imgTest from "../../../../../../public/foto1.png";
 import { MapPin } from "lucide-react";
-import { Prisma } from "@prisma/client";
 import { useAppointmentForm, AppointmentFormData } from "./schedule-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +28,7 @@ import { useCallback, useMemo, useState } from "react";
 import { ScheduleTimeList } from "./schedule-times-list";
 import { createNewAppointment } from "../_actions/create-appointment";
 import { toast } from "sonner";
+import type { Prisma } from "@/generated/prisma/browser";
 
 type UserWithServiceAndSubscription = Prisma.UserGetPayload<{
   include: {

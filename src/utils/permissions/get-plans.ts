@@ -1,6 +1,6 @@
 "use server";
 
-import { Plan } from "@prisma/client";
+import { Plan } from "@/generated/prisma/enums";
 import { PlansProps } from "@/utils/plans/index";
 
 export interface PlanDetailInfo {

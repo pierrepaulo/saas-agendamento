@@ -1,41 +1,53 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import doctorImg from "../../../../public/doctor-hero1.png";
+﻿import { Button } from "@/components/ui/button";
+import { ArrowBigDown, ArrowBigRight } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
-    <section className="bg-white">
-      <div className="container mx-auto px-4 pt-6 pb-16 sm:px-8 sm:pt-20 sm:pb-24 lg:px-12 lg:pt-28">
-        <main className="flex flex-col items-center gap-10 pt-16 md:pt-4 text-center lg:min-h-[60vh] lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:text-left">
-          <article className="flex w-full max-w-3xl flex-col items-center justify-center gap-8 text-balance lg:items-start">
-            <h1 className="text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
-              Encontre os melhores profissionais em um único local!
-            </h1>
-            <p className="max-w-2xl text-lg text-muted-foreground md:text-xl text-balance">
-              Nós somos uma plataforma para profissionais da saúde com foco em
-              agilizar seu atendimento de forma simplificada e organizada.
-            </p>
+    <section className="relative overflow-hidden bg-background bg-[url('/clinic-bg-hero.png')] bg-cover bg-center">
+      <div
+        className="pointer-events-none absolute inset-0 bg-background/85"
+        aria-hidden="true"
+      />
+      <div className="container relative z-10 mx-auto flex min-h-screen flex-col items-center justify-center px-4 py-20 text-center sm:px-6 sm:py-24 lg:px-8">
+        <div className="max-w-3xl text-balance">
+          <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground sm:text-sm">
+            A solução completa para sua clínica
+          </span>
+          <h1 className="mt-4 text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            Automatize sua clínica.{" "}
+            <span className="gradient-primary bg-clip-text text-transparent">
+              Ganhe tempo todos os dias.
+            </span>
+          </h1>
+          <p className="mt-5 text-base text-muted-foreground sm:text-lg font-semibold">
+            Organize profissionais e horários, confirme consultas
+            automaticamente e reduza cancelamentos.
+          </p>
+          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             <Button
+              asChild
               size="lg"
-              className="mx-auto bg-emerald-500 font-semibold hover:bg-emerald-400 lg:mx-0"
+              className="h-12 px-10 text-base gradient-primary text-primary-foreground hover:opacity-90 sm:h-14 sm:px-14 sm:text-lg rounded-3xl"
             >
-              Encontre uma clinica
+              <Link href="/#contato" className="inline-flex items-center gap-2">
+                Começar teste grátis
+                <ArrowBigRight className="size-4 sm:size-5" />
+              </Link>
             </Button>
-          </article>
-
-          <div className="hidden w-full max-w-[460px] justify-center lg:flex lg:justify-end">
-            <Image
-              src={doctorImg}
-              alt="Foto ilustrativa profissional de saúde"
-              width={480}
-              height={560}
-              className="h-auto w-full max-h-[560px] object-cover"
-              sizes="(min-width: 1024px) 460px, 0px"
-              quality={100}
-              priority
-            />
+            <Button
+              asChild
+              size="lg"
+              variant="ghost"
+              className="h-12 px-10 text-base hover:opacity-90 sm:h-14 sm:px-14 sm:text-lg rounded-3xl border border-border "
+            >
+              <Link href="/#contato" className="inline-flex items-center gap-2">
+                Ver como funciona
+                <ArrowBigDown className="size-4 sm:size-5" />
+              </Link>
+            </Button>
           </div>
-        </main>
+        </div>
       </div>
     </section>
   );

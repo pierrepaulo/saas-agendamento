@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -9,109 +9,148 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { LogIn, Menu } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { cn } from "@/lib/utils";
+import { Menu } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
-import { handleRegister } from "../_actions/login";
-
-type SessionStatus = "loading" | "authenticated" | "unauthenticated";
+import { useEffect, useState } from "react";
 
 type NavItem = {
   href: string;
   label: string;
 };
 
-const NAV_ITEMS: NavItem[] = [{ href: "#profissionais", label: "Profissionais" }];
+const NAV_ITEMS: NavItem[] = [
+  { href: "#vantagens", label: "Vantagens" },
+  { href: "#para-quem", label: "Para quem \u00e9" },
+  { href: "#como-funciona", label: "Como funciona" },
+  { href: "#planos", label: "Planos" },
+  { href: "#contato", label: "Contato" },
+];
+
+const LOGIN_HREF = "/api/auth/signin";
+// TODO: trocar para a rota de cadastro/onboarding quando existir no projeto.
+const CTA_HREF = "/#contato";
 
 const NAV_LINK_CLASS =
-  "flex w-full items-center justify-center md:w-auto text-base font-medium text-zinc-900 transition-colors hover:text-zinc-700";
+  "rounded-md px-2 py-1 text-base font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 md:w-auto";
 
-interface NavLinksProps {
-  onNavigate: () => void;
-  onLogin: () => void;
-  status: SessionStatus;
-  isAuthenticated: boolean;
-}
-
-function NavLinks({
-  onNavigate,
-  onLogin,
-  status,
-  isAuthenticated,
-}: NavLinksProps) {
+function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       {NAV_ITEMS.map((item) => (
         <Link
-          onClick={onNavigate}
           key={item.href}
           href={item.href}
+          onClick={onNavigate}
           className={NAV_LINK_CLASS}
         >
           {item.label}
         </Link>
       ))}
-
-      {status === "loading" ? null : isAuthenticated ? (
-        <Link href="/dashboard" onClick={onNavigate} className={NAV_LINK_CLASS}>
-          Acessar clinica
-        </Link>
-      ) : (
-        <Button onClick={onLogin}>
-          <LogIn /> Portal da clinica
-        </Button>
-      )}
     </>
   );
 }
 
 export function Header() {
-  const { data: session, status } = useSession();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  async function handleLogin() {
-    await handleRegister("google");
-  }
+  useEffect(() => {
+    function handleScroll() {
+      setIsScrolled(window.scrollY > 8);
+    }
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-999 py-4 px-6 bg-white">
-      <div className="container mx-auto flex items-center justify-between">
-        <Link href="/" className="text-3xl font-bold text-zinc-900">
-          Clinica<span className="text-emerald-500">PRO</span>
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 w-full transition-all duration-300",
+        isScrolled
+          ? "border-b border-border/70 bg-background/80 shadow-sm backdrop-blur-lg "
+          : "border-b border-transparent"
+      )}
+    >
+      <div className="container mx-auto flex h-20 items-center gap-4 px-4 sm:px-6 lg:px-8">
+        <Link
+          href="/"
+          className="flex items-center gap-1 text-2xl font-semibold text-foreground sm:text-3xl"
+        >
+          <span>Clinica</span>
+          <span className="text-primary">PRO</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
-          <NavLinks
-            onNavigate={() => setIsOpen(false)}
-            onLogin={handleLogin}
-            status={status}
-            isAuthenticated={Boolean(session)}
-          />
+        <nav
+          className="hidden flex-1 items-center justify-center gap-4 md:flex lg:gap-6"
+          aria-label="Navega\u00e7\u00e3o principal"
+        >
+          <NavLinks />
         </nav>
 
+        <div className="hidden items-center gap-2 md:flex">
+          <Button
+            asChild
+            variant="ghost"
+            size="lg"
+            className="rounded-3xl text-muted-foreground"
+          >
+            <Link href={LOGIN_HREF}>Entrar</Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90"
+          >
+            <Link href={CTA_HREF}>Teste grátis</Link>
+          </Button>
+        </div>
+
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild className="md:hidden">
-            <Button className="text-black" variant="ghost" size="icon">
-              <Menu className="w-6 h-6" />
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon-lg"
+              className="ml-auto rounded-3xl text-muted-foreground md:hidden"
+              aria-label="Abrir menu"
+            >
+              <Menu className="size-6" />
             </Button>
           </SheetTrigger>
 
-          <SheetContent
-            side="right"
-            className="z-9999 w-60 sm:w-[300px] px-6 pt-14"
-          >
-            <SheetHeader className="px-0 pt-0">
+          <SheetContent side="right" className="w-72 px-6 pt-12">
+            <SheetHeader className="px-0 pt-0 text-left">
               <SheetTitle>Menu</SheetTitle>
-              <SheetDescription>Veja nossos links</SheetDescription>
+              <SheetDescription>Navegue pelas seções</SheetDescription>
             </SheetHeader>
-            <nav className="flex flex-col gap-3">
-              <NavLinks
-                onNavigate={() => setIsOpen(false)}
-                onLogin={handleLogin}
-                status={status}
-                isAuthenticated={Boolean(session)}
-              />
+            <nav
+              className="mt-4 flex flex-col gap-2"
+              aria-label="Navega\u00e7\u00e3o principal"
+            >
+              <NavLinks onNavigate={() => setIsOpen(false)} />
             </nav>
+            <div className="mt-6 flex flex-col gap-3 ">
+              <Button
+                asChild
+                variant="outline"
+                size="lg"
+                className="rounded-3xl"
+              >
+                <Link href={LOGIN_HREF} onClick={() => setIsOpen(false)}>
+                  Entrar
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90"
+              >
+                <Link href={CTA_HREF} onClick={() => setIsOpen(false)}>
+                  Teste grátis
+                </Link>
+              </Button>
+            </div>
           </SheetContent>
         </Sheet>
       </div>

@@ -31,7 +31,7 @@ export function Hero() {
               className="h-12 w-full px-10 text-base gradient-primary text-primary-foreground hover:opacity-90 sm:h-14 sm:flex-1 sm:px-14 sm:text-lg rounded-3xl landing-button"
             >
               <Link
-                href="/#contato"
+                href="/api/auth/signin"
                 className="inline-flex w-full items-center justify-center gap-2"
               >
                 Começar teste grátis
@@ -45,7 +45,7 @@ export function Hero() {
               className="h-12 w-full px-10 text-base hover:opacity-90 sm:h-14 sm:flex-1 sm:px-14 sm:text-lg rounded-3xl border border-border landing-button"
             >
               <Link
-                href="/#contato"
+                href="/#como-funciona"
                 className="inline-flex w-full items-center justify-center gap-2"
               >
                 Ver como funciona

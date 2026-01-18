@@ -103,7 +103,7 @@ export function Header() {
             size="lg"
             className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90 landing-button"
           >
-            <Link href={CTA_HREF}>Teste grátis</Link>
+            <Link href={LOGIN_HREF}>Teste grátis</Link>
           </Button>
         </div>
 

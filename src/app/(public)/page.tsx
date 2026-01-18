@@ -1,22 +1,27 @@
+import { Advantages } from "./_components/advantages";
+import { Contact } from "./_components/contact";
 import { Footer } from "./_components/footer";
 import { Header } from "./_components/header";
 import { Hero } from "./_components/hero";
-import { Professionals } from "./_components/professionals";
-import { getProfessionals } from "./_data-access/get-professionals";
+import { HowItWorks } from "./_components/how-it-works";
+import { Plans } from "./_components/plans";
+import { TargetAudience } from "./_components/target-audience";
+import { SmoothScroll } from "@/components/ui/smooth-scroll";
 
-export const revalidate = 120;
-
-export default async function home() {
-  const professionals = await getProfessionals();
-
+export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div id="top" className="flex min-h-screen flex-col">
+      <SmoothScroll />
       <Header />
-      <div>
+      <main id="conteudo" className="flex flex-col">
         <Hero />
-        <Professionals professionals={professionals || []} />
-        <Footer />
-      </div>
+        <Advantages />
+        <HowItWorks />
+        <TargetAudience />
+        <Plans />
+        <Contact />
+      </main>
+      <Footer />
     </div>
   );
 }

@@ -1,5 +1,5 @@
 ﻿import { Button } from "@/components/ui/button";
-import { ArrowBigDown, ArrowBigRight } from "lucide-react";
+import { ArrowBigDown, ArrowBigRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 export function Hero() {
@@ -24,13 +24,16 @@ export function Hero() {
             Organize profissionais e horários, confirme consultas
             automaticamente e reduza cancelamentos.
           </p>
-          <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row sm:justify-center mb-3">
             <Button
               asChild
               size="lg"
-              className="h-12 px-10 text-base gradient-primary text-primary-foreground hover:opacity-90 sm:h-14 sm:px-14 sm:text-lg rounded-3xl"
+              className="h-12 w-full px-10 text-base gradient-primary text-primary-foreground hover:opacity-90 sm:h-14 sm:flex-1 sm:px-14 sm:text-lg rounded-3xl"
             >
-              <Link href="/#contato" className="inline-flex items-center gap-2">
+              <Link
+                href="/#contato"
+                className="inline-flex w-full items-center justify-center gap-2"
+              >
                 Começar teste grátis
                 <ArrowBigRight className="size-4 sm:size-5" />
               </Link>
@@ -39,14 +42,21 @@ export function Hero() {
               asChild
               size="lg"
               variant="ghost"
-              className="h-12 px-10 text-base hover:opacity-90 sm:h-14 sm:px-14 sm:text-lg rounded-3xl border border-border "
+              className="h-12 w-full px-10 text-base hover:opacity-90 sm:h-14 sm:flex-1 sm:px-14 sm:text-lg rounded-3xl border border-border"
             >
-              <Link href="/#contato" className="inline-flex items-center gap-2">
+              <Link
+                href="/#contato"
+                className="inline-flex w-full items-center justify-center gap-2"
+              >
                 Ver como funciona
                 <ArrowBigDown className="size-4 sm:size-5" />
               </Link>
             </Button>
           </div>
+          <p className="text-sm text-muted-foreground animate-fade-in">
+            <CheckCircle2 className="w-4 h-4 inline mr-2 text-accent" />
+            Sem cartão de crédito • 3 dias grátis • Cancele quando quiser
+          </p>
         </div>
       </div>
     </section>

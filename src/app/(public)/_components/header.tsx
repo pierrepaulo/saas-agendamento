@@ -21,8 +21,8 @@ type NavItem = {
 
 const NAV_ITEMS: NavItem[] = [
   { href: "#vantagens", label: "Vantagens" },
-  { href: "#para-quem", label: "Para quem \u00e9" },
   { href: "#como-funciona", label: "Como funciona" },
+  { href: "#para-quem", label: "Para quem é" },
   { href: "#planos", label: "Planos" },
   { href: "#contato", label: "Contato" },
 ];
@@ -32,7 +32,7 @@ const LOGIN_HREF = "/api/auth/signin";
 const CTA_HREF = "/#contato";
 
 const NAV_LINK_CLASS =
-  "rounded-md px-2 py-1 text-base font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 md:w-auto";
+  "rounded-md px-2 py-1 text-base font-medium text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40 lg:w-auto";
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   return (
@@ -71,7 +71,7 @@ export function Header() {
         "fixed inset-x-0 top-0 z-50 w-full transition-all duration-300",
         isScrolled
           ? "border-b border-border/70 bg-background/80 shadow-sm backdrop-blur-lg "
-          : "border-b border-transparent"
+          : "border-b border-transparent",
       )}
     >
       <div className="container mx-auto flex h-20 items-center gap-4 px-4 sm:px-6 lg:px-8">
@@ -83,13 +83,13 @@ export function Header() {
           <span className="text-primary">PRO</span>
         </Link>
         <nav
-          className="hidden flex-1 items-center justify-center gap-4 md:flex lg:gap-6"
-          aria-label="Navega\u00e7\u00e3o principal"
+          className="hidden flex-1 items-center justify-center gap-4 lg:flex lg:gap-6"
+          aria-label="Navegção principal"
         >
           <NavLinks />
         </nav>
 
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <Button
             asChild
             variant="ghost"
@@ -108,16 +108,18 @@ export function Header() {
         </div>
 
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon-lg"
-              className="ml-auto rounded-3xl text-muted-foreground md:hidden"
-              aria-label="Abrir menu"
-            >
-              <Menu className="size-6" />
-            </Button>
-          </SheetTrigger>
+          <div className="ml-auto rounded-full border border-border/70 p-1 lg:hidden">
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon-lg"
+                className="rounded-full text-muted-foreground"
+                aria-label="Abrir menu"
+              >
+                <Menu className="size-6" />
+              </Button>
+            </SheetTrigger>
+          </div>
 
           <SheetContent side="right" className="w-72 px-6 pt-12">
             <SheetHeader className="px-0 pt-0 text-left">
@@ -126,7 +128,7 @@ export function Header() {
             </SheetHeader>
             <nav
               className="mt-4 flex flex-col gap-2"
-              aria-label="Navega\u00e7\u00e3o principal"
+              aria-label="Navegação principal"
             >
               <NavLinks onNavigate={() => setIsOpen(false)} />
             </nav>

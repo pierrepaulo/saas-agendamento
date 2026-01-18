@@ -85,7 +85,7 @@ export function Plans() {
                 </CardContent>
 
                 <CardFooter className="mt-auto">
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full landing-button">
                     <Link href={PLAN_CTA_HREF}>Falar com a equipe</Link>
                   </Button>
                 </CardFooter>

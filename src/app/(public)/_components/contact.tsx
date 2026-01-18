@@ -253,7 +253,7 @@ export function Contact() {
                   <Button
                     type="submit"
                     size="lg"
-                    className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90"
+                    className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90 landing-button"
                   >
                     Enviar mensagem
                   </Button>

@@ -94,14 +94,14 @@ export function Header() {
             asChild
             variant="ghost"
             size="lg"
-            className="rounded-3xl text-muted-foreground"
+            className="rounded-3xl text-muted-foreground landing-button"
           >
             <Link href={LOGIN_HREF}>Entrar</Link>
           </Button>
           <Button
             asChild
             size="lg"
-            className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90"
+            className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90 landing-button"
           >
             <Link href={CTA_HREF}>Teste grátis</Link>
           </Button>
@@ -137,7 +137,7 @@ export function Header() {
                 asChild
                 variant="outline"
                 size="lg"
-                className="rounded-3xl"
+                className="rounded-3xl landing-button"
               >
                 <Link href={LOGIN_HREF} onClick={() => setIsOpen(false)}>
                   Entrar
@@ -146,7 +146,7 @@ export function Header() {
               <Button
                 asChild
                 size="lg"
-                className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90"
+                className="rounded-3xl gradient-primary text-primary-foreground hover:opacity-90 landing-button"
               >
                 <Link href={CTA_HREF} onClick={() => setIsOpen(false)}>
                   Teste grátis

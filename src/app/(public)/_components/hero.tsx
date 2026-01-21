@@ -31,7 +31,7 @@ export function Hero() {
               className="h-12 w-full px-10 text-base gradient-primary text-primary-foreground hover:opacity-90 sm:h-14 sm:flex-1 sm:px-14 sm:text-lg rounded-3xl landing-button"
             >
               <Link
-                href="/api/auth/signin"
+                href="/api/auth/signin?callbackUrl=%2Fdashboard"
                 className="inline-flex w-full items-center justify-center gap-2"
               >
                 Começar teste grátis

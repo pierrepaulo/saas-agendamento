@@ -27,7 +27,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "#contato", label: "Contato" },
 ];
 
-const LOGIN_HREF = "/api/auth/signin";
+const LOGIN_HREF = "/api/auth/signin?callbackUrl=%2Fdashboard";
 // TODO: trocar para a rota de cadastro/onboarding quando existir no projeto.
 const CTA_HREF = "/#contato";
 

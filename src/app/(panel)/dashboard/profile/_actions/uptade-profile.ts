@@ -52,7 +52,7 @@ export async function updateProfile(formData: FormSchema) {
     return {
       data: "Clinica atualizada com sucesso!",
     };
-  } catch (err) {
+  } catch {
     return {
       error: "Falha ao atualizar clinica",
     };

@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       },
       {
         status: 400,
-      }
+      },
     );
   }
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -73,14 +73,14 @@ export async function GET(request: NextRequest) {
     const blockedTimes = Array.from(blockedSlots);
 
     return NextResponse.json(blockedTimes);
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       {
         error: "nenhum agendamento encontrado",
       },
       {
         status: 400,
-      }
+      },
     );
   }
 }

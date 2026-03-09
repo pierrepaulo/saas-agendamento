@@ -80,7 +80,7 @@ export async function createSubscription({ type }: SubscriptionProps) {
       sessionId: stripeCheckoutSession.id,
       url: stripeCheckoutSession.url,
     };
-  } catch (err) {
+  } catch {
     return {
       sessionId: "",
       error: "Falha ao ativar plano",

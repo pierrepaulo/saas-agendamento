@@ -36,7 +36,7 @@ export async function updateProfileAvatar({
     return {
       data: "Imagem alterada com sucesso!",
     };
-  } catch (err) {
+  } catch {
     return {
       error: "Falha ao alterar imagem",
     };

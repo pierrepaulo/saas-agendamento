@@ -33,7 +33,7 @@ export async function deleteReminder(formData: FormSchema) {
     return {
       data: "Lembrete deletado com sucesso",
     };
-  } catch (err) {
+  } catch {
     return {
       error: "Não foi possivel deletar o lembrete.",
     };

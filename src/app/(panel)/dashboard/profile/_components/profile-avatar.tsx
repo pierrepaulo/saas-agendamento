@@ -62,7 +62,7 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
         {
           method: "POST",
           body: formData,
-        }
+        },
       );
 
       const data = await response.json();
@@ -73,7 +73,7 @@ export function AvatarProfile({ avatarUrl, userId }: AvatarProfileProps) {
 
       toast("Imagem alterada com sucesso!");
       return data.secure_url as string;
-    } catch (err) {
+    } catch {
       return null;
     }
   }

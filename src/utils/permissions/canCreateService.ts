@@ -36,7 +36,7 @@ export async function canCreateService(
     const checkUserLimit = await checkSubscriptionExpired(session);
 
     return checkUserLimit;
-  } catch (err) {
+  } catch {
     return {
       hasPermission: false,
       planId: "EXPIRED",
@@ -45,3 +45,4 @@ export async function canCreateService(
     };
   }
 }
+

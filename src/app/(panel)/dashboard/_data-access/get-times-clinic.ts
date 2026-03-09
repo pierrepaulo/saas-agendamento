@@ -32,7 +32,7 @@ export async function getTimesClinic({ userId }: { userId: string }) {
       times: user.times,
       userId: user.id,
     };
-  } catch (err) {
+  } catch {
     return {
       times: [],
       userId: "",

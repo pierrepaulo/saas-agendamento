@@ -10,8 +10,3 @@ export function formatPhone(value: string) {
 
   return formattedValue;
 }
-
-export function extractPhoneNumber(phone: string) {
-  const phoneValue = phone.replace(/[\(\)\s-]/g, "");
-  return phoneValue;
-}

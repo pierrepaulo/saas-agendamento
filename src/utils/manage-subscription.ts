@@ -10,7 +10,7 @@ export async function manageSubscription(
   customerId: string,
   createAction = false,
   deleteAction = false,
-  type?: Plan
+  type?: Plan,
 ) {
   const findUser = await prisma.user.findFirst({
     where: {
@@ -21,7 +21,7 @@ export async function manageSubscription(
   if (!findUser) {
     return Response.json(
       { error: "Falha ao realizar assinatura" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -50,7 +50,7 @@ export async function manageSubscription(
       await prisma.subscription.create({
         data: subscriptionData,
       });
-    } catch (err) {}
+    } catch {}
   } else {
     try {
       const findSubscription = await prisma.subscription.findFirst({
@@ -71,6 +71,6 @@ export async function manageSubscription(
           plan: type ?? "BASIC",
         },
       });
-    } catch (err) {}
+    } catch {}
   }
 }

@@ -23,7 +23,7 @@ export async function getUserData({ userId }: GetUserDataProps) {
       return null;
     }
     return user;
-  } catch (err) {
+  } catch {
     return null;
   }
 }

@@ -45,7 +45,7 @@ export async function createPortalCustomer() {
     return {
       sessionId: portalSession.url,
     };
-  } catch (err) {
+  } catch {
     return {
       sessionId: "",
       error: "Usuário nao encontrado",

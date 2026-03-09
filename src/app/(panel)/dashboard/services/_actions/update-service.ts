@@ -1,53 +1,57 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import z from "zod";
+import {
+  getServiceActionUser,
+  parseServiceActionData,
+  revalidateServices,
+  type ServiceActionResult,
+} from "./shared";
 
 const formSchema = z.object({
-  serviceId: z.string().min(1, { message: "O id do serviço é obrigatorio" }),
-  name: z.string().min(1, { message: "O nome do serviço é obrigatorio" }),
-  price: z.number().min(1, { message: "O preço do serviço é obrigatorio" }),
+  serviceId: z.string().min(1, { message: "O id do servico e obrigatorio" }),
+  name: z.string().min(1, { message: "O nome do servico e obrigatorio" }),
+  price: z.number().min(1, { message: "O preco do servico e obrigatorio" }),
   duration: z.number(),
 });
 
 type FromSchema = z.infer<typeof formSchema>;
 
-export async function updateService(formData: FromSchema) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return {
-      error: "Falha ao atualizar serviço",
-    };
+export async function updateService(
+  formData: FromSchema,
+): Promise<ServiceActionResult<string>> {
+  const user = await getServiceActionUser("Falha ao atualizar servico");
+  if ("error" in user) {
+    return user;
   }
 
-  const schema = formSchema.safeParse(formData);
-  if (!schema.success) {
-    return {
-      error: schema.error.issues[0].message,
-    };
+  const parsed = parseServiceActionData(formSchema, formData);
+  if ("error" in parsed) {
+    return parsed;
   }
 
   try {
     await prisma.service.update({
       where: {
-        id: formData.serviceId,
-        userId: session?.user.id,
+        id: parsed.data.serviceId,
+        userId: user.userId,
       },
       data: {
-        name: formData.name,
-        price: formData.price,
-        duration: formData.duration < 30 ? 30 : formData.duration,
+        name: parsed.data.name,
+        price: parsed.data.price,
+        duration: parsed.data.duration < 30 ? 30 : parsed.data.duration,
       },
     });
-    revalidatePath("/dashboard/services");
+
+    revalidateServices();
+
     return {
-      data: "Serviço atualizado com sucesso",
+      data: "Servico atualizado com sucesso",
     };
-  } catch (err) {
+  } catch {
     return {
-      error: "Falha ao atualizar serviço",
+      error: "Falha ao atualizar servico",
     };
   }
 }

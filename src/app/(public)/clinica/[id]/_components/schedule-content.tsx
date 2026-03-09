@@ -63,16 +63,16 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
       try {
         const dateString = date.toISOString().split("T")[0];
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_URL}/api/schedule/get-appointments?userId=${clinic.id}&date=${dateString}`
+          `${process.env.NEXT_PUBLIC_URL}/api/schedule/get-appointments?userId=${clinic.id}&date=${dateString}`,
         );
 
         const json = await response.json();
         return json;
-      } catch (err) {
+      } catch {
         return [];
       }
     },
-    [clinic.id]
+    [clinic.id],
   );
 
   const handleDateChange = useCallback(
@@ -86,7 +86,7 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
         setLoadingSlots(false);
       }
     },
-    [fetchBlockedTimes]
+    [fetchBlockedTimes],
   );
 
   const availableTimeSlots = useMemo(() => {
@@ -295,12 +295,12 @@ export function ScheduleContent({ clinic }: ScheduleContentProps) {
                       selectedDate={selectedDate}
                       requiredSlots={
                         clinic.services.find(
-                          (service) => service.id === selectedServiceId
+                          (service) => service.id === selectedServiceId,
                         )
                           ? Math.ceil(
                               clinic.services.find(
-                                (service) => service.id === selectedServiceId
-                              )!.duration / 30
+                                (service) => service.id === selectedServiceId,
+                              )!.duration / 30,
                             )
                           : 1
                       }

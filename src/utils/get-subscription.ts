@@ -14,7 +14,8 @@ export async function getSubscription({ userId }: { userId: string }) {
       },
     });
     return subscription;
-  } catch (err) {
+  } catch {
     return null;
   }
 }
+

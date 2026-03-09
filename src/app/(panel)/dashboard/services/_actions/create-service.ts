@@ -1,51 +1,55 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import z from "zod";
+import {
+  getServiceActionUser,
+  parseServiceActionData,
+  revalidateServices,
+  type ServiceActionResult,
+} from "./shared";
 
 const formSchema = z.object({
-  name: z.string().min(1, { message: "O nome do serviço é obrigatorio" }),
-  price: z.number().min(1, { message: "O preço do serviço é obrigatorio" }),
+  name: z.string().min(1, { message: "O nome do servico e obrigatorio" }),
+  price: z.number().min(1, { message: "O preco do servico e obrigatorio" }),
   duration: z.number(),
 });
 
 type FromSchema = z.infer<typeof formSchema>;
 
-export async function createNewService(formData: FromSchema) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return {
-      error: "Falha ao cadastrar serviço",
-    };
+export async function createNewService(
+  formData: FromSchema,
+): Promise<
+  ServiceActionResult<Awaited<ReturnType<typeof prisma.service.create>>>
+> {
+  const user = await getServiceActionUser("Falha ao cadastrar servico");
+  if ("error" in user) {
+    return user;
   }
 
-  const schema = formSchema.safeParse(formData);
-  if (!schema.success) {
-    return {
-      error: schema.error.issues[0].message,
-    };
+  const parsed = parseServiceActionData(formSchema, formData);
+  if ("error" in parsed) {
+    return parsed;
   }
 
   try {
     const newService = await prisma.service.create({
       data: {
-        name: formData.name,
-        price: formData.price,
-        duration: formData.duration,
-        userId: session?.user?.id,
+        name: parsed.data.name,
+        price: parsed.data.price,
+        duration: parsed.data.duration,
+        userId: user.userId,
       },
     });
 
-    revalidatePath("/dashboard/services");
+    revalidateServices();
 
     return {
       data: newService,
     };
-  } catch (err) {
+  } catch {
     return {
-      error: "Falha ao cadastrar serviço",
+      error: "Falha ao cadastrar servico",
     };
   }
 }

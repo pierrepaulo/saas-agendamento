@@ -25,5 +25,5 @@ export async function getInfoSchedule({ userId }: { userId: string }) {
       return null;
     }
     return user;
-  } catch (err) {}
+  } catch {}
 }

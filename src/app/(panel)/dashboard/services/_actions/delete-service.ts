@@ -1,48 +1,52 @@
 "use server";
 
-import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import z from "zod";
+import {
+  getServiceActionUser,
+  parseServiceActionData,
+  revalidateServices,
+  type ServiceActionResult,
+} from "./shared";
 
 const formSchema = z.object({
-  serviceId: z.string().min(1, { message: "O id é obrigatorio" }),
+  serviceId: z.string().min(1, { message: "O id e obrigatorio" }),
 });
 
 type FromSchema = z.infer<typeof formSchema>;
 
-export async function deleteService(formData: FromSchema) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return {
-      error: "Falha ao deletar serviço",
-    };
+export async function deleteService(
+  formData: FromSchema,
+): Promise<ServiceActionResult<string>> {
+  const user = await getServiceActionUser("Falha ao deletar servico");
+  if ("error" in user) {
+    return user;
   }
 
-  const schema = formSchema.safeParse(formData);
-  if (!schema.success) {
-    return {
-      error: schema.error.issues[0].message,
-    };
+  const parsed = parseServiceActionData(formSchema, formData);
+  if ("error" in parsed) {
+    return parsed;
   }
 
   try {
     await prisma.service.update({
       where: {
-        id: formData.serviceId,
-        userId: session?.user?.id,
+        id: parsed.data.serviceId,
+        userId: user.userId,
       },
       data: {
         status: false,
       },
     });
-    revalidatePath("/dashboard/services");
+
+    revalidateServices();
+
     return {
-      data: "Serviço deletado com sucesso",
+      data: "Servico deletado com sucesso",
     };
-  } catch (err) {
+  } catch {
     return {
-      error: "Falha ao deletar serviço",
+      error: "Falha ao deletar servico",
     };
   }
 }

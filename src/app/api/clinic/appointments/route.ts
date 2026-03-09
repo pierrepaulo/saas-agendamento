@@ -1,12 +1,12 @@
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export const GET = auth(async function GET(request) {
   if (!request.auth) {
     return NextResponse.json(
       { error: "Acesso nao autorizado!" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -21,7 +21,7 @@ export const GET = auth(async function GET(request) {
   if (!clinicId) {
     return NextResponse.json(
       { error: "Usuário não encontrado" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -46,10 +46,10 @@ export const GET = auth(async function GET(request) {
     });
 
     return NextResponse.json(appointments);
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: "Falha ao buscar agendamentos" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 });

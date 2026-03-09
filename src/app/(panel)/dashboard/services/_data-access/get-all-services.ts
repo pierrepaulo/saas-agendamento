@@ -18,7 +18,7 @@ export async function getAllServices({ userId }: { userId: string }) {
     return {
       data: services,
     };
-  } catch (err) {
+  } catch {
     return {
       error: "Falha ao buscar serviços",
     };

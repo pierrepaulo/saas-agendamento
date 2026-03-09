@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import {
   Sheet,
   SheetContent,
@@ -15,6 +16,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Folder,
+  type LucideIcon,
   List,
   Settings,
 } from "lucide-react";
@@ -23,11 +25,67 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import logoImg from "../../../../../public/logo.png";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+
+interface SidebarItem {
+  href: string;
+  icon: LucideIcon;
+  label: string;
+}
+
+interface SidebarSection {
+  title: string;
+  links: SidebarItem[];
+}
+
+interface SidebarLinksProps {
+  className?: string;
+  isCollapsed: boolean;
+  links: SidebarItem[];
+  pathname: string;
+}
+
+interface SidebarLinkProps {
+  href: string;
+  icon: LucideIcon;
+  isCollapsed: boolean;
+  label: string;
+  pathname: string;
+}
+
+const sidebarSections: SidebarSection[] = [
+  {
+    title: "Painel",
+    links: [
+      {
+        href: "/dashboard",
+        label: "Agendamentos",
+        icon: CalendarCheck2,
+      },
+      {
+        href: "/dashboard/services",
+        label: "Servicos",
+        icon: Folder,
+      },
+    ],
+  },
+  {
+    title: "Configuracoes",
+    links: [
+      {
+        href: "/dashboard/profile",
+        label: "Meu perfil",
+        icon: Settings,
+      },
+      {
+        href: "/dashboard/plans",
+        label: "Planos",
+        icon: Banknote,
+      },
+    ],
+  },
+];
+
+const flatSidebarLinks = sidebarSections.flatMap((section) => section.links);
 
 export function SideBarDashboard({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -35,15 +93,14 @@ export function SideBarDashboard({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen w-full">
-      {/* Desktop */}
       <aside
         className={clsx(
-          "flex flex-col border-r bg-background transition-all duration-300 p-4 h-full",
+          "h-full flex flex-col border-r bg-background p-4 transition-all duration-300",
           {
+            "hidden md:fixed md:flex": true,
             "w-20": isCollapsed,
             "w-64": !isCollapsed,
-            "hidden md:flex md:fixed": true,
-          }
+          },
         )}
       >
         <div className="mb-6 mt-4">
@@ -62,102 +119,39 @@ export function SideBarDashboard({ children }: { children: React.ReactNode }) {
         </div>
 
         <Button
-          className="bg-gray-100 hover:bg-gray-50 text-zinc-900 self-end mb-2"
+          className="mb-2 self-end bg-gray-100 text-zinc-900 hover:bg-gray-50"
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
-          {!isCollapsed ? (
-            <ChevronLeft className="w-12 h-12" />
+          {isCollapsed ? (
+            <ChevronRight className="h-12 w-12" />
           ) : (
-            <ChevronRight className="w-12 h-12" />
+            <ChevronLeft className="h-12 w-12" />
           )}
         </Button>
 
-        {/* Sidebar recolhida */}
         {isCollapsed && (
-          <nav className="flex flex-col gap-1 overflow-hidden mt-2">
-            <SideBarLink
-              href="/dashboard"
-              label="Agendamentos"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<CalendarCheck2 className="w-6 h-6" />}
-            />
-            <SideBarLink
-              href="/dashboard/services"
-              label="Serviços"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<Folder className="w-6 h-6" />}
-            />
-            <SideBarLink
-              href="/dashboard/profile"
-              label="Meu perfil"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<Settings className="w-6 h-6" />}
-            />
-            <SideBarLink
-              href="/dashboard/plans"
-              label="Planos"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<Banknote className="w-6 h-6" />}
-            />
-          </nav>
+          <SideBarLinks
+            className="mt-2 flex flex-col gap-1 overflow-hidden"
+            isCollapsed={true}
+            links={flatSidebarLinks}
+            pathname={pathname}
+          />
         )}
 
         <Collapsible open={!isCollapsed}>
           <CollapsibleContent>
-            <nav className="flex flex-col gap-1 overflow-hidden">
-              <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
-                Painel
-              </span>
-            </nav>
-            <SideBarLink
-              href="/dashboard"
-              label="Agendamentos"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<CalendarCheck2 className="w-6 h-6" />}
-            />
-            <SideBarLink
-              href="/dashboard/services"
-              label="Serviços"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<Folder className="w-6 h-6" />}
-            />
-
-            <span className="text-sm text-gray-400 font-medium mt-1 uppercase">
-              Configurações
-            </span>
-
-            <SideBarLink
-              href="/dashboard/profile"
-              label="Meu perfil"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<Settings className="w-6 h-6" />}
-            />
-            <SideBarLink
-              href="/dashboard/plans"
-              label="Planos"
-              pathname={pathname}
-              isCollapsed={isCollapsed}
-              icon={<Banknote className="w-6 h-6" />}
-            />
+            <SideBarSections pathname={pathname} />
           </CollapsibleContent>
         </Collapsible>
       </aside>
 
-      {/* Moboile */}
       <div
         className={clsx("flex flex-1 flex-col transition-all duration-300", {
           "md:ml-20": isCollapsed,
           "md:ml-64": !isCollapsed,
         })}
       >
-        <header className="md:hidden flex items-center justify-between border-b px-2 md:px-6 h-14 z-10 sticky top-0 bg-white">
+        <header className="sticky top-0 z-10 flex h-14 items-center justify-between border-b bg-white px-2 md:hidden md:px-6">
           <Sheet>
             <div className="flex items-center gap-4">
               <SheetTrigger asChild>
@@ -167,85 +161,99 @@ export function SideBarDashboard({ children }: { children: React.ReactNode }) {
                   className="md:hidden"
                   onClick={() => setIsCollapsed(false)}
                 >
-                  <List className="w-5 h-5" />
+                  <List className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <h1 className="text-base md:text-lg font-semibold ">
+              <h1 className="text-base font-semibold md:text-lg">
                 Menu ClinicaPRO
               </h1>
             </div>
 
-            <SheetContent side="right" className="sm:max-w-xs text-black p-4">
+            <SheetContent side="right" className="p-4 text-black sm:max-w-xs">
               <SheetTitle>ClinicaPRO</SheetTitle>
               <SheetDescription>Menu administrativo</SheetDescription>
-              <nav className="grid gap-2 text-base pt-5">
-                <SideBarLink
-                  href="/dashboard"
-                  label="Agendamentos"
-                  pathname={pathname}
-                  isCollapsed={isCollapsed}
-                  icon={<CalendarCheck2 className="w-6 h-6" />}
-                />
-                <SideBarLink
-                  href="/dashboard/services"
-                  label="Serviços"
-                  pathname={pathname}
-                  isCollapsed={isCollapsed}
-                  icon={<Folder className="w-6 h-6" />}
-                />
-                <SideBarLink
-                  href="/dashboard/profile"
-                  label="Meu perfil"
-                  pathname={pathname}
-                  isCollapsed={isCollapsed}
-                  icon={<Settings className="w-6 h-6" />}
-                />
-                <SideBarLink
-                  href="/dashboard/plans"
-                  label="Planos"
-                  pathname={pathname}
-                  isCollapsed={isCollapsed}
-                  icon={<Banknote className="w-6 h-6" />}
-                />
-              </nav>
+              <SideBarLinks
+                className="grid gap-2 pt-5 text-base"
+                isCollapsed={false}
+                links={flatSidebarLinks}
+                pathname={pathname}
+              />
             </SheetContent>
           </Sheet>
         </header>
 
-        <main className="flex-1 py-4 px-2 md:p-6">{children}</main>
+        <main className="flex-1 px-2 py-4 md:p-6">{children}</main>
       </div>
     </div>
   );
 }
 
-interface SidebarLinkProps {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  pathname: string;
-  isCollapsed: boolean;
+function SideBarSections({ pathname }: { pathname: string }) {
+  return (
+    <>
+      {sidebarSections.map((section) => (
+        <div key={section.title}>
+          <span className="mt-1 text-sm font-medium uppercase text-gray-400">
+            {section.title}
+          </span>
+          <SideBarLinks
+            className="mt-1 flex flex-col gap-1 overflow-hidden"
+            isCollapsed={false}
+            links={section.links}
+            pathname={pathname}
+          />
+        </div>
+      ))}
+    </>
+  );
+}
+
+function SideBarLinks({
+  className,
+  isCollapsed,
+  links,
+  pathname,
+}: SidebarLinksProps) {
+  return (
+    <nav className={className}>
+      {links.map((link) => (
+        <SideBarLink
+          key={link.href}
+          href={link.href}
+          icon={link.icon}
+          isCollapsed={isCollapsed}
+          label={link.label}
+          pathname={pathname}
+        />
+      ))}
+    </nav>
+  );
 }
 
 function SideBarLink({
   href,
   icon,
+  isCollapsed,
   label,
   pathname,
-  isCollapsed,
 }: SidebarLinkProps) {
+  const Icon = icon;
+
   return (
     <Link href={href}>
       <div
         className={clsx(
-          "flex items-center gap-2  px-3 py-2 rounded-md ransition-colors",
+          "ransition-colors flex items-center gap-2 rounded-md px-3 py-2",
           {
-            "text-white bg-blue-500": pathname === href,
+            "bg-blue-500 text-white": pathname === href,
             "text-gray-700 hover:bg-gray-100": pathname !== href,
-          }
+          },
         )}
       >
-        <span className="w-6 h-6">{icon} </span>
-        {!isCollapsed && <span>{label} </span>}
+        <span className="h-6 w-6">
+          <Icon className="h-6 w-6" />
+        </span>
+        {!isCollapsed && <span>{label}</span>}
       </div>
     </Link>
   );

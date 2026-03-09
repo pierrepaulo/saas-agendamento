@@ -5,7 +5,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { AppointmentWithService } from "./appointments-list";
-import { format } from "date-fns";
 import { formatCurrency } from "@/utils/formatCurrency";
 
 interface DialogAppointmentProps {
